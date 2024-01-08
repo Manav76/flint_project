@@ -59,7 +59,7 @@ export default function Home() {
   },[])
   return (
   <div className="card">
-    {!account ? "" : <span className='pro'>PRO</span>}
+    {!account ? "" : <span className='master'>PRO</span>}
     <Image src ={Profile} alt={"Profile Image Alt Text"} width={90} height={90}/>
     <h3> Check Ether</h3>
      {!account ? (
@@ -91,7 +91,7 @@ export default function Home() {
       </div>
     ):
     (
-      <div className="skills">
+      <div className="details">
         <h6>Ethers</h6>
         <ul>
           <li>Account</li>
