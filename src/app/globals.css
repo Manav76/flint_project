@@ -1,27 +1,43 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital@1&display=swap');
+*{
+  box-sizing: border-box;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+body{
+  /* background-image: linear-gradient(to right top, #2d0036, #4f015b, #730283, #9a02ac); */
+  background-image: linear-gradient(to right top, #000000, #ff8c00);
+  font-family: Poppins, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: 100vh;
+  margin: 0;
 }
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+h3{
+  margin: 10px 0;
+}
+h2{
+  margin: 5px 0;
+}
+h5{
+  margin: 5px 0;
+}
+p{
+  font-size: 14px;
+  line-height: 21px;
+  width: 80%;
+  margin: 0 auto;
+}
+.card{
+ background-color: black;
+ border-radius: 25px;
+ box-shadow: 10px 10px 15px rgba(0,0,0,0.35);
+ color: #b3b8cd;
+ padding: 10px 0 0;
+ position: relative;
+ width: 350px;
+ max-width: 100%; 
+ margin-top: 200px;
+ text-align: center;
+ margin: 20px 0;
+ padding-bottom: 1.3rem;
 }
