@@ -72,6 +72,7 @@ left: 30px;
   font-weight: 500;
   padding: 10px 20px;
   margin-top: 10px;
+  cursor: pointer;
 }
 .details{
   background-color: black;
@@ -80,7 +81,7 @@ left: 30px;
   margin-top: 30px;
 }
 .details ul{
-  list-style-type: disc;
+  list-style-type: none;
   margin: 0;
   padding: 0;
 }

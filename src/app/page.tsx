@@ -6,13 +6,52 @@ import { JsonRpcApiProvider } from 'ethers';
 import { JsonRpcProvider ,  } from 'ethers';
 import Ethereum from '../assets/Eth.png'
 import Profile from '../assets/Nft.png'
+import { useToast } from '@chakra-ui/toast';
 import Web3Modal from "web3modal";
 export default function Home() {
+  const toast = useToast();
   const [account, setAccount] = useState("");
   const [balance , setBalance] = useState("");
   const [connect , setConnect] = useState(false);
+  const [percentageChange, setPercentageChange] = useState<number>(0);
+  const [showPercentageChange, setShowPercentageChange] = useState(false);
   const failMessage = "Failed to Connect with Your Metamask account. Please Check and retry again"
   const provider = new JsonRpcProvider(`https://mainnet.infura.io/v3/b27ad50709544a07a600c08e4a7ffe95`);
+  const fetchHistoricalBalance = async ()=>{
+    try {
+      const twelveHoursAgo = Math.floor((Date.now() / 1000) - 12 * 60 * 60); // 12 hours ago
+
+      const balanceTwelveHoursAgo = await provider.getBalance(account, twelveHoursAgo);
+      const formattedBalanceTwelveHoursAgo = ethers.formatEther(balanceTwelveHoursAgo);
+
+      // Fetch current balance
+      const nativeTokenBalance = await provider.getBalance(account);
+      const formattedBalance = ethers.formatEther(nativeTokenBalance);
+
+      const startBalance = parseFloat(formattedBalanceTwelveHoursAgo);
+      const endBalance = parseFloat(formattedBalance);
+      const change = endBalance - startBalance;
+      const percentageChange = (change / startBalance) * 100;
+
+      // setPercentageChange((prevPercentage) => {
+      //   return prevPercentage === null ? parseFloat(percentageChange.toFixed(2)) : prevPercentage;
+      // });
+      setPercentageChange(percentageChange);
+      console.log(percentageChange);
+      setShowPercentageChange(true);
+      if (percentageChange < -10) {
+       toast({
+        
+        description: "Balance percentage for the past 12 hours has gone below 10%",
+        status: "info",
+        duration: 5000, // 5 seconds
+        isClosable: true,
+       })
+      }
+    } catch (error) {
+      console.error('Error fetching historical balance:', error);
+    }
+  }
   const checkIfWalletConnected = async () =>{
     if(!window.ethereum) return;
     const accounts = await window.ethereum.request({method : "eth_accounts"});
@@ -35,11 +74,13 @@ export default function Home() {
    if(!window.ethereum) return console.log(failMessage);
    const accounts = await window.ethereum.request({method: "eth_requestAccounts"});
    setAccount(accounts[0]);
+   fetchHistoricalBalance()
    window.location.reload();
   }
   useEffect(()=>{
     checkIfWalletConnected();
   })
+
   useEffect(()=>{
     async function accountChanged(){
       window.ethereum.on("accountsChanged" , async function(){
@@ -75,33 +116,49 @@ export default function Home() {
         <h5>Verified Account <span className='tick'>&#10004;</span></h5>
         <p>Ether Account and balance Checker <br/> Find account details</p>
         <div className="buttons">
-          <button className='primary ghost' onClick={()=>{
-
-          }}>
-            Ether Account Details
-          </button>
+         
+              <button className='primary ghost' onClick={() => {
+              fetchHistoricalBalance()
+              }}>
+                Percentage Change in Balance
+              </button>
         </div>
         </div>
      )
     
     }
-    {!account && !connect ? (
-      <div className="buttons">
-        <button className='primary' onClick={()=>connectWallet()}>Connect Wallet</button>
-      </div>
-    ):
-    (
-      <div className="details">
-        <h6>Ethers</h6>
-        <ul>
-          <li>Account</li>
-          <li>{account}</li>
-          <li>Balance</li>
-          <li>{balance}</li>
-        </ul>
-      </div>
-    )
-    }
-  </div>
+    {(account && connect) ? (
+        <div className="details">
+          <h6>Ethers</h6>
+          <ul>
+            <li>Account Unique Id</li>
+            <li>{account}</li>
+            <li>Balance</li>
+            <li>{balance}</li>
+          </ul>
+        </div>
+      ) : null}
+
+      {(account && !connect && percentageChange!==null) ? (
+        <div className="details">
+          <h6>Ethers</h6>
+          <ul>
+            <li>The percentage Change</li>
+            <li>{percentageChange}%</li>
+            <li>Account Unique Id</li>
+            <li>{account}</li>
+            <li>Balance</li>
+            <li>{balance}</li>
+          </ul>
+        </div>
+      ) : null}
+
+      {!account && !connect && !percentageChange ? (
+        <div className="buttons">
+          <button className='primary' onClick={connectWallet}>Connect Wallet</button>
+        </div>
+      ) : null}
+    
+    </div>
   );
 };
