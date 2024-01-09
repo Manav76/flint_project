@@ -5,7 +5,7 @@ Set up the project using next-js , used typescript for the code-base and css for
 External libraries installed : ethers 
 
 #### heading 2
-To run this project locally you need to set run the npm install command , it will install all the reqd libraries
+To run this project locally you need to set run the npm install command , it will install all the reqd libraries and metamask extension on the browser
 
 Key features:
 App allows you to succesfully connect to your metamask wallet
