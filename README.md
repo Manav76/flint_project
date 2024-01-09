@@ -1,10 +1,10 @@
-## heading 2
+## heading 1
 This is the readme file for the project
 Project setup:
 Set up the project using next-js , used typescript for the code-base and css for styling
 External libraries installed : ethers 
 
-#### heading 4
+#### heading 2
 To run this project locally you need to set run the npm install command , it will install all the reqd libraries
 
 Key features:
