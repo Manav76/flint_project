@@ -7,16 +7,19 @@ import { JsonRpcProvider ,  } from 'ethers';
 import Ethereum from '../assets/Eth.png'
 import Profile from '../assets/Nft.png'
 import { useToast } from '@chakra-ui/toast';
+
 import Web3Modal from "web3modal";
 export default function Home() {
   const toast = useToast();
+
   const [account, setAccount] = useState("");
   const [balance , setBalance] = useState("");
   const [connect , setConnect] = useState(false);
   const [percentageChange, setPercentageChange] = useState<number>(0);
   const [showPercentageChange, setShowPercentageChange] = useState(false);
-  const failMessage = "Failed to Connect with Your Metamask account. Please Check and retry again"
+  const failMessage = "Please Click on the Connect Wallet button and proceed further to the main dashboard"
   const provider = new JsonRpcProvider(`https://mainnet.infura.io/v3/b27ad50709544a07a600c08e4a7ffe95`);
+  //function to fetch out the historical balance ,storing it in a state and then comparing with the current balance 
   const fetchHistoricalBalance = async ()=>{
     try {
       const twelveHoursAgo = Math.floor((Date.now() / 1000) - 12 * 60 * 60); // 12 hours ago
@@ -33,13 +36,12 @@ export default function Home() {
       const change = endBalance - startBalance;
       const percentageChange = (change / startBalance) * 100;
 
-      // setPercentageChange((prevPercentage) => {
-      //   return prevPercentage === null ? parseFloat(percentageChange.toFixed(2)) : prevPercentage;
-      // });
+   
       setPercentageChange(percentageChange);
       console.log(percentageChange);
       setShowPercentageChange(true);
-      if (percentageChange < -10) {
+      //using a toast to display when the percentage is less than 10
+      if (percentageChange < 10) {
        toast({
         
         description: "Balance percentage for the past 12 hours has gone below 10%",
@@ -52,6 +54,7 @@ export default function Home() {
       console.error('Error fetching historical balance:', error);
     }
   }
+  //function to check if the wallet connected , fetches the accounts and used the first account in the array for it
   const checkIfWalletConnected = async () =>{
     if(!window.ethereum) return;
     const accounts = await window.ethereum.request({method : "eth_accounts"});
@@ -70,6 +73,7 @@ export default function Home() {
     setBalance(showBalance);
     
   }
+  
   const connectWallet = async ()=>{
    if(!window.ethereum) return console.log(failMessage);
    const accounts = await window.ethereum.request({method: "eth_requestAccounts"});
