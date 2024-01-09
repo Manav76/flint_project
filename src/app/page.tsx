@@ -66,8 +66,8 @@ export default function Home() {
       // return failMessage;
       console.log("Fail");
     }
-    const address = "0xF02c1c8e6114b1Dbe8937a39260b5b0a374432bB"
-    const balance = await provider.getBalance(address);
+    // const address = "0xF02c1c8e6114b1Dbe8937a39260b5b0a374432bB"
+    const balance = await provider.getBalance(account);
     const showBalance = `${ethers.formatEther(balance)}-ETH`
     console.log(showBalance);
     setBalance(showBalance);
